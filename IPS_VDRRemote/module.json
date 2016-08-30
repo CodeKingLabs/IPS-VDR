@@ -1,0 +1,11 @@
+{
+	"id": "{88AB7598-754B-48A4-AA5D-5503F83A0471}",
+	"name": "IPS_VDRRemote",
+	"type": 3,
+	"vendor": "",
+	"aliases":["IPS_VDRRemote"],
+	"parentRequirements": ["{66900AB7-4164-4AB3-9F86-703A38CD5DA0}"],
+	"childRequirements": [""],
+	"implemented": ["{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}"],
+	"prefix": "VDRRemote"
+}

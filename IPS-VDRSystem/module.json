@@ -1,0 +1,11 @@
+{
+	"id": "{1B32A3B0-83BD-4508-A322-EAAE78AEBC42}",
+	"name": "IPS_VDRSystem",
+	"type": 3,
+	"vendor": "",
+	"aliases":["IPS_VDRSystem"],
+	"parentRequirements": ["{66900AB7-4164-4AB3-9F86-703A38CD5DA0}"],
+	"childRequirements": [""],
+	"implemented": ["{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}"],
+	"prefix": "VDRSys"
+}

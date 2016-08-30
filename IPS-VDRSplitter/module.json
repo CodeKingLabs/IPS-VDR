@@ -1,0 +1,11 @@
+{
+	"id": "{A9EAA472-5694-49FA-8D90-1D5AC1A89915}",
+	"name": "IPS_VDRIO",
+	"type": 1,
+	"vendor": "",
+	"aliases":["IPS_VDRIO"],
+	"parentRequirements": [],
+	"childRequirements": ["{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}"],
+	"implemented": ["{66900AB7-4164-4AB3-9F86-703A38CD5DA0}"],
+	"prefix": "VDRIO"
+}

@@ -1,0 +1,11 @@
+{
+	"id": "{8CC05593-8FC3-4DE2-8F88-2BFCC2F8177D}",
+	"name": "IPS_VDRRecords",
+	"type": 3,
+	"vendor": "",
+	"aliases":["IPS_VDRRecords"],
+	"parentRequirements": ["{66900AB7-4164-4AB3-9F86-703A38CD5DA0}"],
+	"childRequirements": [""],
+	"implemented": ["{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}"],
+	"prefix": "VDRRecords"
+}

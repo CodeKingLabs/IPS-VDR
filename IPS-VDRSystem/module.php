@@ -39,30 +39,27 @@ class IPS_VDRSystem extends IPSModule {
       }
       SetValue($this->GetIDForIdent("Plugins") ,$ResultPlugin);
       $DeviceNumber = 0;
-      $Devices = '<table width="100%">
-      <td>Gerät</td>
-      <td>Kanal</td>
-      <td>Signalstärke</td>
-      <td>Signalqualität</td>';
+      $Devices = '<div class="table" style="width:100%">
+        <div class="tr" style="border: 1px solid red;">
+        <div class="td"><b>Gerät</b></div>
+        <div class="td" style="padding-left:20px"><b>Kanal</b></div>
+        <div class="td" style="padding-left:20px;text-align:center"><b>Signalstärke</b></div>
+        <div class="td" style="padding-left:20px;text-align:center"><b>Signalqualität</b></div>
+      </div>';
       foreach ($data->Buffer->vdr->devices as $Device) {
         if($Device->name <> "") {
-          if($DeviceNumber % 2 == 0) {
-            $Devices .= '<tr style="background-color:#000000; color:#ffffff;"><td>';
-          }
-          else {
-            $Devices .= '<tr style="background-color:#080808; color:#ffffff;"><td>';
-          }
-          $Devices .= $Device->name;
-          $Devices .= "</td><td>";
-          $Devices .= $Device->channel_nr." ".$Device->channel_name;
-          $Devices .= "</td><td>";
-          $Devices .= $Device->signal_strength;
-          $Devices .= "</td><td>";
-          $Devices .= $Device->signal_quality;
-          $Devices .= "</td>";
-          //$DeviceNumber++;
+
+          $Devices .= '<div class="tr">
+                            <div class="td">' . $Device->name . '</div>
+                            <div class="td" style="padding-left:20px">' . $Device->channel_nr." ".$Device->channel_name . '</div>
+                            <div class="td" style="padding-left:20px;text-align:center">' . $Device->signal_strength . '</div>
+                            <div class="td" style="padding-left:20px;text-align:center">' . $Device->signal_quality . '</div>
+                      </div>';
         }
       }
+
+        $Devices .= '</div>';
+
       SetValue($this->GetIDForIdent("Devices") ,$Devices);
 
     }

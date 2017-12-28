@@ -34,7 +34,7 @@ class IPS_VDRRecords extends IPSModule {
   $sid = $this->RegisterScript("WebHookVDRRecordings", "WebHookVDRRecordings", '
   <?//Do not delete or modify.
   if ((isset($_GET["RecordingID"])) AND (isset($_GET["Action"])))  {
-    vdr_ProcessHookdata(' . $this->InstanceID . ' ,$_GET);
+    VDRRecords_ProcessHookdata(' . $this->InstanceID . ' ,$_GET);
   }
   ', -8);
   IPS_SetHidden($sid, true);
@@ -52,48 +52,43 @@ public function ReceiveData($JSONString) {
   IPS_LogMessage("case",$data->Action);
   switch ($data->Action) {
     case "getRecordings":
-    $Records = '<table width="100%">';
+    $Records = '<div class="ipsContainer container nestedEven table">';
     $i = 0;
     IPS_LogMessage("VDR",utf8_decode($JSONString));
     foreach ($data->Buffer->recordings as $Record) {
+      $date = date("d.m.Y H:i",$Record->event_start_time);
+      $title = $Record->event_title;
 
+      $Records .= '
+                        <div class="content tr">
+                            <div class="icon td ipsIconTV"></div>
+                            <div class="title td">' . $date . '</div>
+                            <div class="title td" style="padding-left:20px">' . $title . '</div>
+                            <div class="visual td">
+                                <div class="ipsContainer enum">
+                                    <i class="iconSpinner iconSmallSpinner throbber"></i>
+                                    <div style="background-color: rgba(255, 0, 0, 0.3);"'.$this->getWebhookLink($Record->number, "Delete").'>löschen</div>
+                                    <div class="selected" style="background-color: rgba(0, 255, 0, 0.3);"'.$this->getWebhookLink($Record->number, "Play").'>abspielen</div>
+                                </div>
+                            </div>
+                            <div class="link td"></div>
+                        </div>
+                    ';
 
-
-      if($i % 2 == 0) {
-        $Records .= '<tr style="background-color:#000000; color:#ffffff;"><td>';
-      }
-      else {
-        $Records .= '<tr style="background-color:#080808; color:#ffffff;"><td>';
-      }
-
-
-      $Records .= date("d.m.Y H:i",$Record->event_start_time)." ";
-      $Records .= $Record->event_title."<br /> ".str_replace("#","",$Record->event_short_text);
-      $Records .= "</td><td>";
-      $Records.= '<div class="button" style="border:1px solid #df0909; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-size:12px;font-family:arial, helvetica, sans-serif; padding: 10px 10px 10px 10px; text-decoration:none; display:inline-block;text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:bold; color: #FFFFFF;
-      background-color: #f62b2b; background-image: -webkit-gradient(linear, left top, left bottom, from(#f62b2b), to(#d20202));
-      background-image: -webkit-linear-gradient(top, #f62b2b, #d20202);
-      background-image: -moz-linear-gradient(top, #f62b2b, #d20202);
-      background-image: -ms-linear-gradient(top, #f62b2b, #d20202);
-      background-image: -o-linear-gradient(top, #f62b2b, #d20202);
-      background-image: linear-gradient(to bottom, #f62b2b, #d20202);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f62b2b, endColorstr=#d20202);"'.$this->getWebhookLink($Record->number, "Delete").'>Löschen';
-      $Records.="</div> ";
-
-
-      $Records.= '<div class="button" style="border:1px solid #8bcf54; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-size:12px;font-family:arial, helvetica, sans-serif; padding: 10px 10px 10px 10px; text-decoration:none; display:inline-block;text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:bold; color: #FFFFFF;
-      background-color: #a9db80; background-image: -webkit-gradient(linear, left top, left bottom, from(#a9db80), to(#96c56f));
-      background-image: -webkit-linear-gradient(top, #a9db80, #96c56f);
-      background-image: -moz-linear-gradient(top, #a9db80, #96c56f);
-      background-image: -ms-linear-gradient(top, #a9db80, #96c56f);
-      background-image: -o-linear-gradient(top, #a9db80, #96c56f);
-      background-image: linear-gradient(to bottom, #a9db80, #96c56f);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a9db80, endColorstr=#96c56f);"'.$this->getWebhookLink($Record->number, "Play").'>Abspielen';
-      $Records.="</div></td></tr>";
       $i++;
-
-
-
     }
-    $Records.="</table>";
+
+    if($i == 0) {
+        $Records .= '
+                        <div class="content tr">
+                            <div class="td" style="text-align:center!important;">keine Aufnahmen vorhanden!</div>
+                        </div>
+                    ';
+    }
+
+
+    $Records.="</div>";
+
     SetValue($this->GetIDForIdent("AnzahlAufnahmen") ,count($data->Buffer->recordings));
     SetValue($this->GetIDForIdent("Aufnahmen") ,utf8_decode($Records));
     break;

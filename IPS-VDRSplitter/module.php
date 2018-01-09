@@ -13,7 +13,7 @@ class IPS_VDRIO extends IPSModule {
 		$this->RegisterTimer("UpdateRecordings", 5000, 'VDRIO_getRecords($_IPS[\'TARGET\']);');
 		$this->RegisterTimer("UpdateSystemInfo", 5000, 'VDRIO_getSystemInfo($_IPS[\'TARGET\']);');
 
-		$this->RegisterTimer("UpdateProgram", 5000/*60000 * 30*/, 'VDRIO_getProgram($_IPS[\'TARGET\']);');
+		$this->RegisterTimer("UpdateProgram", 60000 * 30, 'VDRIO_getProgram($_IPS[\'TARGET\']);');
 	}
 	public function ApplyChanges() {
 		//Never delete this line!
@@ -35,12 +35,18 @@ class IPS_VDRIO extends IPSModule {
 	}
 
 	public function getSystemInfo() {
+        if(!$this->ReadPropertyString("host")) {
+            return;
+        }
 		$Request = new cVDRRequest($this->ReadPropertyString("host"), $this->ReadPropertyString("port"));
 		$SystemInfo = $Request->get("info.json");
 		$this->SendDataToChildren(json_encode(Array("DataID" => "{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}", "Action"=> "getSystemInfo", "Buffer" => $SystemInfo)));
 	}
 
     public function getRecords() {
+        if(!$this->ReadPropertyString("host")) {
+            return;
+        }
         $Request = new cVDRRequest($this->ReadPropertyString("host"), $this->ReadPropertyString("port"));
         $Records = $Request->get("recordings.json");
 
@@ -49,6 +55,9 @@ class IPS_VDRIO extends IPSModule {
     }
 
     public function getProgram() {
+	    if(!$this->ReadPropertyString("host")) {
+	        return;
+        }
         $Request = new cVDRRequest($this->ReadPropertyString("host"), $this->ReadPropertyString("port"));
         $Program = $Request->get("events.json?chevents=1");
 

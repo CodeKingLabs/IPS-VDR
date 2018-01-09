@@ -1,0 +1,11 @@
+{
+	"id": "{56F86F9F-0AC2-4A81-A87C-260FF0ECF5F9}",
+	"name": "IPS_VDRProgram",
+	"type": 3,
+	"vendor": "",
+	"aliases":["IPS_VDRProgram"],
+	"parentRequirements": ["{66900AB7-4164-4AB3-9F86-703A38CD5DA0}"],
+	"childRequirements": [""],
+	"implemented": ["{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}"],
+	"prefix": "VDRProgram"
+}

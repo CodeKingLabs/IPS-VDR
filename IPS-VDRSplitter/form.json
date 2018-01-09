@@ -4,5 +4,12 @@
     { "type": "Label", "label": "Daten für die Verbindung zum SVDR-Dienst"},
     { "name": "host", "type": "ValidationTextBox", "caption": "Host" },
     { "name": "port", "type": "ValidationTextBox", "caption": "Port" },
+  ],
+  "actions": [
+    {
+      "type": "Button",
+      "label": "Update TV Program",
+      "onClick": "VDRIO_getProgram($id)"
+    }
   ]
 }

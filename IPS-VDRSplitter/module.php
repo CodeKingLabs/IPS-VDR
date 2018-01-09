@@ -12,9 +12,8 @@ class IPS_VDRIO extends IPSModule {
 		$this->RegisterPropertyString("port", "2001");
 		$this->RegisterTimer("UpdateRecordings", 5000, 'VDRIO_getRecords($_IPS[\'TARGET\']);');
 		$this->RegisterTimer("UpdateSystemInfo", 5000, 'VDRIO_getSystemInfo($_IPS[\'TARGET\']);');
-		// $this->RegisterTimer("UpdateSpielplan", 5000, 'sisSplitter_getSpielplan($_IPS[\'TARGET\']);');
 
-
+		$this->RegisterTimer("UpdateProgram", 5000/*60000 * 30*/, 'VDRIO_getProgram($_IPS[\'TARGET\']);');
 	}
 	public function ApplyChanges() {
 		//Never delete this line!
@@ -41,13 +40,20 @@ class IPS_VDRIO extends IPSModule {
 		$this->SendDataToChildren(json_encode(Array("DataID" => "{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}", "Action"=> "getSystemInfo", "Buffer" => $SystemInfo)));
 	}
 
-	public function getRecords() {
-		$Request = new cVDRRequest($this->ReadPropertyString("host"), $this->ReadPropertyString("port"));
-		$Records = $Request->get("recordings.json");
-		IPS_LogMessage("RecordsReceivedSplitter", count($Records));
-$this->SendDataToChildren(json_encode(Array("DataID" => "{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}", "Action"=> "getRecordings", "Buffer" => $Records)));
+    public function getRecords() {
+        $Request = new cVDRRequest($this->ReadPropertyString("host"), $this->ReadPropertyString("port"));
+        $Records = $Request->get("recordings.json");
 
-	}
+        IPS_LogMessage("RecordsReceivedSplitter", count($Records->recordings));
+        $this->SendDataToChildren(json_encode(Array("DataID" => "{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}", "Action"=> "getRecordings", "Buffer" => $Records)));
+    }
+
+    public function getProgram() {
+        $Request = new cVDRRequest($this->ReadPropertyString("host"), $this->ReadPropertyString("port"));
+        $Program = $Request->get("events.json?chevents=1");
+
+        $this->SendDataToChildren(json_encode(Array("DataID" => "{A09538DA-3DAB-4E0B-93FF-30C0E3B374D6}", "Action"=> "getProgram", "Buffer" => $Program)));
+    }
 
 	public function deleteRecords($RecordingID) {
 		$Request = new cVDRRequest($this->ReadPropertyString("host"), $this->ReadPropertyString("port"));
